@@ -1,0 +1,20 @@
+{% extends 'layout.html' %} 
+
+{% block content %}
+<div class="container">
+    <h2 style="margin-top: 10px">Your general Feedback: {{score}}/10</h2>
+  <div class="row" style="margin-top: 10px">
+    <div class="col">
+      {% for feedback in all_feedbacks %}
+      <p>
+        {{feedback}}
+      </p>
+      {% endfor %}
+      <p>In general, we will give you a score of {{score}}/10. Good luck in your interview!</p>
+    </div>
+  </div>
+  <div class="row">
+    <img src="/static/general_statistic.png" width="100%" />
+  </div>
+</div>
+{% endblock %}

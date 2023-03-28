@@ -1,0 +1,31 @@
+{% extends 'layout.html' %} {% block content %}
+
+<div class="container">
+    <h2 style="margin-top: 10px">Feedback for your lexical expression</h2>
+  <div class="row" style="margin-top: 10px">
+    <div class="col">
+        <p> 
+            According to our analysis, a good interviewee uses more joyful, 
+            less fearful and slightly more angry sentences than an average/bad interviewee.
+        </p>
+        {% for feedback in feedbacks %}
+        <p>
+        {{feedback}}
+        </p>
+        {% endfor %}
+    </div>
+  </div>
+  <div class="row">
+    <p>Sentiments</p>
+    <img src="/static/text_output/emotion_statistic.png" width="100%" />
+  </div>
+  <div class="row">
+    <p>Word counts</p>
+    <img src="/static/text_output/other_statistic.png" width="100%" />
+  </div>
+  <div class="row">
+    <p>LIWC</p>
+    <img src="/static/text_output/liwc_statistic.png" width="100%" />
+  </div>
+</div>
+{% endblock %}

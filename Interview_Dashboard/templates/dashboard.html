@@ -1,0 +1,153 @@
+{% extends 'layout.html' %} 
+
+{% block content %}
+<div class="container">
+  <a href="{{url_for('general_feedback')}}">
+    <h2 style="margin-top: 10px">Go to general feedback</h2>
+  </a>
+  <div class="row">
+    <div class="slidecontainer">
+      <input
+        type="range"
+        min="0"
+        max="{{max}}"
+        value="0"
+        class="slider"
+        id="myRange"
+        oninput="this.nextElementSibling.value = this.value; setNewCounter(this.value);"
+        onchange="this.nextElementSibling.value = this.value; setNewCounter(this.value);"
+      />
+      <output id="value" class="output">0</output> <span>seconds</span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-5">
+      <div style="margin: 10px auto">
+        <video id="video" autoplay controls="controls" preload="preload" width="100%">
+          <source src="/static/uploads/{{filename}}" type="video/mp4" />
+        </video>
+      </div>
+    </div>
+    <div class="col-7" style="border: thin solid black; padding: 5px;">
+      <a href="{{url_for('video')}}">
+        <div class="container">
+          <div class="row" width="100%">
+            <div class="col">
+              <img
+                id="frames"
+                src="/static/video_output/faces_marked/{{img}}"
+                width="100%"
+              />
+            </div>
+            <div class="col">
+              <img
+                id="facial_action"
+                src="/static/video_output/AUs/{{img}}"
+                width="100%"
+              />
+            </div>
+            <div class="col">
+              <img
+                id="expression"
+                src="/static/video_output/EXPRs/{{img}}"
+                width="100%"
+              />
+            </div>
+          </div>
+          <div class="row" width="100%">
+            <img id="va" src="/static/video_output/VAs/{{img}}" width="100%" />
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div class="row" style="margin: 10px auto">
+    <div class="col" style="border: thin solid black; margin-right: 5px;">
+      <a href="{{url_for('text')}}" style="color:black;">
+        <div class="row" style="padding: 5px;">
+            <p id="sentence">{{sentence}}</p>
+        </div>
+        <div class="row">
+          <div class="col" style="padding-bottom: 5px;">
+            <img id="text_expr" width="100%" />
+          </div>
+          <div class="col">
+            <p id="explanation">{{explanation}}</p>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col" style="border: thin solid black; margin-left: 5px;">
+      <a href="{{url_for('audio')}}" style="color:black;">
+        <div class="row" style="padding: 5px;">
+          <div class="col-4">
+            <p id='fluency_span' hidden>Fluency: </p> 
+            <p id="fluency">{{audio_fluency}}</p>
+          </div>
+          <div class="col-8">
+            <img id="fluency_explanation" hidden width="100%" />
+          </div>
+        </div>
+      <div class="row">
+        <div class="col-5" style="padding-bottom: 5px;">
+          <img id="audio_expr" width="100%" />
+        </div>
+        <div class="col-7">
+          <img id="audio_explanation" hidden width="100%" />
+        </div>
+      </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  let myInterval;
+  function get_features() {
+    $.ajax({
+      type: "GET",
+      cache: false,
+      url: "{{url_for('get_features')}}",
+      success: function (resp) {
+        $("#frames").attr(
+          "src",
+          "/static/video_output/faces_marked/" + resp.img
+        );
+        if (resp.audio_explanation != ""){
+          $("#audio_explanation").attr("hidden", false);
+          $("#fluency_explanation").attr("hidden", false);
+          $("#fluency_span").attr("hidden", false);
+        }
+        $("#facial_action").attr("src", "/static/video_output/AUs/" + resp.img);
+        $("#expression").attr("src", "/static/video_output/EXPRs/" + resp.img);
+        $("#va").attr("src", "/static/video_output/VAs/" + resp.img);
+        $("#text_expr").attr("src", "/static/text_output/EXPRs/" + resp.img);
+        $("#audio_expr").attr("src", "/static/audio_output/EXPRs/" + resp.img);
+        $("#audio_explanation").attr("src", "/static/audio_output/" + resp.audio_explanation);
+        $("#fluency_explanation").attr("src", "/static/audio_output/" + resp.fluency_explanation);
+        document.getElementById('myRange').value = resp.counter;
+        document.getElementById('value').innerHTML = resp.counter;
+        document.getElementById("video").currentTime = resp.counter;
+        document.getElementById("sentence").innerHTML = resp.sentence;
+        document.getElementById("explanation").innerHTML = resp.explanation;
+        document.getElementById("fluency").innerHTML = resp.audio_fluency;
+      },
+    }
+    );
+  }
+
+  function setNewCounter(value) {
+    $.ajax({
+      type: "POST",
+      url: "{{url_for('get_features')}}",
+      data: {'counter': JSON.stringify(value)},
+    }
+    );
+  }
+
+  $(document).ready(function () {
+    myInterval = setInterval(get_features, 1000);
+  });
+</script>
+{% endblock %}

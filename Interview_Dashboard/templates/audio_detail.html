@@ -1,0 +1,32 @@
+{% extends 'layout.html' %} {% block content %}
+
+<div class="container">
+  <h2 style="margin-top: 10px">Feedback for your prosodic expression</h2>
+
+  <div class="row" style="margin-top: 10px">
+    <div class="col">
+      <p>Here is a summary of your audio performance: </p>
+      <ul>
+      {% for feature in features %}
+      <li> {{feature}}</li>
+      {% endfor %}
+      </ul>
+    </div>
+    <div class="col">
+      <p>
+        According to our analysis, a good interviewee uses more angry, disgusted or happy tone and less
+        fearful or sad tone than an average/bad interviewee. And good interviewees have a speaking rate between 3 and
+        4, an articulation rate between 4 and 5 and a balance between 0.7 and 0.8.
+      </p>
+      {% for feedback in feedbacks %}
+      <p>
+        {{feedback}}
+      </p>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="row">
+    <img src="/static/audio_output/statistic.png" width="100%" />
+  </div>
+</div>
+{% endblock %}

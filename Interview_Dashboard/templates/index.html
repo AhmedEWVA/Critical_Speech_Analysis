@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <h1>{% block title %} Welcome to the Interview Dashboard {% endblock %}</h1>
+    <h2>Select a video to upload and play</h2>
+    <form method="post" action="{{url_for('dashboard')}}"  enctype="multipart/form-data">
+        <dl>
+            <p>
+                <input type="file" name="file" autocomplete="off" required>
+            </p>
+        </dl>
+        <p>
+            <input type="submit" value="Upload">
+        </p>
+    </form>
+{% endblock %}

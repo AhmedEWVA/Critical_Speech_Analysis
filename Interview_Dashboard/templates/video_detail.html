@@ -1,0 +1,33 @@
+{% extends 'layout.html' %} {% block content %}
+
+<div class="container">
+  <h2 style="margin-top: 10px">Feedback for your facial expression</h2>
+  <div class="row" style="margin-top: 10px">
+    <div class="col-8">
+      <p>
+        According to our analysis, a good interviewee show more happy and less
+        neutral or sad facial emotions. 
+        
+        This is because the action units 12, 10, 14 and 6 and 25 are highly related 
+        with impressions like more smiling, friendly, authentic and excited. And they are also important units for
+        detecting the emotion happy.
+
+        Further the action unit 5 is important for the emotion neutral but gives the impression of not being authentic.
+
+        You can see a full table of the action units on the right.        
+      </p>
+      {% for feedback in feedbacks %}
+      <p>
+        {{feedback}}
+      </p>
+      {% endfor %}
+    </div>
+    <div class="col-4">
+      <img src="/static/FAU.jpg" width="100%" />
+    </div>
+  </div>
+  <div class="row">
+    <img src="/static/video_output/statistic.png" width="100%" />
+  </div>
+</div>
+{% endblock %}
